@@ -1,35 +1,30 @@
 const FIXATION_POINTS = [
-    [0, 4, 12, 17, 24, 29, 35, 42, 48],
-    [1, 2, 7, 10, 13, 14, 19, 22, 25, 28, 31, 34, 37, 40, 43, 46, 49],
-    [1, 2, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49],
-    [0, 2, 4, 5, 6, 8, 9, 11, 14, 15, 17, 18, 20, 0, 21, 23, 24, 26, 27, 29, 30, 32, 33, 35, 36, 38, 39, 41, 42, 44, 45, 47, 48],
-    [0, 2, 3, 5, 6, 7, 8, 10, 11, 12, 14, 15, 17, 19, 20, 21, 23, 24, 25, 26, 28, 29, 30, 32, 33, 34, 35, 37, 38, 39, 41, 42, 43, 44, 46, 47, 48]
+    [0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7],
+    [0, 0, 1, 2, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 6, 6, 6, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 9, 10, 10, 10, 11, 11, 11, 12, 12, 12, 13, 13],
+    [0, 0, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16, 17, 17, 18, 18, 19, 19],
+    [0, 1, 1, 2, 2, 3, 4, 5, 5, 6, 7, 7, 8, 8, 8, 9, 10, 10, 11, 12, 12, 14, 15, 15, 16, 17, 17, 18, 19, 19, 20, 21, 21, 22, 23, 23, 24, 25, 25, 26],
+    [0, 1, 1, 2, 3, 3, 4, 5, 6, 7, 7, 8, 9, 10, 10, 11, 12, 12, 13, 13, 14, 15, 16, 16, 17, 18, 19, 20, 20, 21, 22, 23, 23, 24, 25, 26, 27, 27, 28, 29]
 ]
 
-function getWordFixationLength(word, fixationSize) {
-    const wordSize = word.length,
-        points = FIXATION_POINTS[fixationSize]
-
-    for (let i = 0; i < points.length; i++)
-        if (wordSize <= points[i]) return i
-}
 /**
  * Converts text to bionic reading
- * @param {String} str to convert
- * @param {Number} fixationLength from 1 to 5
- * @param {Array} sep separator array, markdown use ['**','**']
- * @returns converted string
+ * @param {String} str
+ * @param {Number} fixationLength optional `1` to `5` (default `3`)
+ * @param {String[]|String} separator optional `"markdown"`, `"latex"`, `"html"`, or array `["<b>","</b>"]` (default `"html"`)
  */
-module.exports = function bionicConvert(str, fixationLength = 3, sep = ['<b>', '</b>'], ) {
+module.exports = function bionicConvert(str, fixationLength = 3, separator = 'html') {
+    const sep = Array.isArray(separator) ? separator : { "html": ['<b>', '</b>'], "markdown": ['**', '**'], "latex": ['\\textbf{', '}'] }[separator.toLowerCase()]
     const matches = str.matchAll(/\p{L}(\p{L}|\p{Nd})*/ug)
-    let result = ""
-    let prev = 0
+    let result = "",
+        prev = 0
 
     for (const match of matches) {
-        const start = match.index,
-            end = start + match[0].length - getWordFixationLength(match[0], fixationLength - 1)
+        const length = match[0].length
+        const start = match.index
+        const end = start + length - FIXATION_POINTS[fixationLength - 1][length]
         result += str.slice(prev, start) + ((start != end) ? (sep[0] + str.slice(start, end) + sep[1]) : "")
         prev = end
     }
+
     return result + str.slice(prev, str.length)
 }
