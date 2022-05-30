@@ -20,7 +20,8 @@ function getWordFixationLength(word, fixationSize) {
  * @param {Array} sep separator array, markdown use ['**','**']
  * @returns converted string
  */
-module.exports = function bionicConvert(str, fixationLength = 3, sep = ['<b>', '</b>'], ) {
+// module.exports = 
+function bionicConvert(str, fixationLength = 3, sep = ['<b>', '</b>'], ) {
     const matches = str.matchAll(/\p{L}(\p{L}|\p{Nd})*/ug)
     let result = ""
     let prev = 0
@@ -33,3 +34,8 @@ module.exports = function bionicConvert(str, fixationLength = 3, sep = ['<b>', '
     }
     return result + str.slice(prev, str.length)
 }
+
+
+// console.log(bionicConvert("Lorem ipsum dolor sit amet, consectetur", 1, ['**', '**']))
+console.log(bionicConvert("Lorem ipsum dolor sit amet, consectetur", 3, ['<strong>', '</strong>']))
+    // console.log(bionicConvert("Lorem ipsum dolor sit amet.", 5))
