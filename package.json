@@ -1,6 +1,6 @@
 {
     "name": "bionic-converter",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Convert text to Bionic Reading format",
     "main": "index.js",
     "devDependencies": {},

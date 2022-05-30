@@ -2,7 +2,7 @@
 
 
 [npm module](https://www.npmjs.com/package/bionic-converter)
-Convert text to bionic reading format.
+Convert text to bionic reading format.  
 Example: **Lor**em **ips**um **dol**or **s**it **am**et, **consec**tetur  
 
 **Demo**
@@ -32,7 +32,7 @@ bionicConvert("Lorem ipsum dolor sit amet.", 5)
 ```
 Output for fixation point 5: **Lo**rem **ip**sum **do**lor **s**it **a**met, **con**sectetur
 
-**Separator**
+**Separator**  
 Set separator by passing array as third argument, this example will output markdown.
 ```javascript
 bionicConvert("Lorem ipsum dolor sit amet.", 3, ['**','**'])
